@@ -6,10 +6,7 @@ import {
   shallowReadonly,
 } from "./reactive"
 
-import { effect } from "./effect"
 
-export { reactive, shallowReactive, readonly, shallowReadonly, effect }
+export { reactive, shallowReactive, readonly, shallowReadonly }
 
-export { ref, toRef, toRefs } from "./ref"
 
-export { computed } from "./computed"

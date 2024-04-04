@@ -20,7 +20,7 @@
     let person = reactive({
       name: "张三",
       family: {
-        son: "张思",
+        son: "张思1",
       },
     })
     let person2 = shallowReactive({
@@ -35,11 +35,13 @@
         son: "张思3",
       },
     })
-    person3.name = "888"
-    person.name = "8999"
-    console.log(reactive, person.family)
+    person3.family.son = "333"
+    person2.family.son = "222"
+    person.family.son = "111"
+    console.log(person.family)
     console.log(person2.family)
-    console.log(55, person, person2, person3)
+    console.log(person3.family)
+    console.log(person, person2, person3)
   </script>
 </body>
 

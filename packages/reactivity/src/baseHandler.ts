@@ -1,22 +1,12 @@
 import {
-  isObject,
-  extend,
-  isArray,
-  haseChange,
-  isIntegerKey,
-  hasOwn,
+  isObject
 } from "@vue/shared"
 import { reactive, readonly } from "./reactive"
-import { TrackOpTypes, TriggerOpTypes } from "./operations"
-import { Track, trigger } from "./effect"
 
 const get = createGetter()
 const shallowGet = createGetter(false, true)
 const readonlyGet = createGetter(true)
 const shallowReadonlyGet = createGetter(true, true)
-
-const set = createSetter()
-const shallowSet = createSetter(true)
 
 // get方法
 function createGetter(isReadonly = false, shallow = false) {
@@ -26,7 +16,6 @@ function createGetter(isReadonly = false, shallow = false) {
     if (!isReadonly) {
       // 是否只读
       // 收集依赖 effect
-      Track(target, TrackOpTypes.GET, key)
     }
 
     if (shallow) {
@@ -42,54 +31,36 @@ function createGetter(isReadonly = false, shallow = false) {
   }
 }
 // set方法
+const set = createSetter()
+const shallowSet = createSetter(true)
 function createSetter(shallow = false) {
   return function set(target, key, value, receiver) {
-    // 可以对数组进行代理
-    const oldValue = target[key]
-    // 判断是数组还是对象
-    // 添加还是修改 (Number(key) < target.length)数组下标和数组长度比较, 小于是修改
-    // haskey为false 新增 true修改
     const result = Reflect.set(target, key, value, receiver)
-    const haskey =
-      isArray(target) && isIntegerKey(key)
-        ? Number(key) < target.length
-        : hasOwn(target, key)
-    if (!haskey) {
-      // 新增
-      trigger(target, TriggerOpTypes.ADD, key, value)
-    } else {
-      // 修改
-      if (haseChange(value, oldValue)) {
-        trigger(target, TriggerOpTypes.SET, key, value, oldValue)
-      }
-    }
     return result
   }
 }
-
 export const reactiveHandlers = {
   get,
-  set,
+  set,// 原版
 }
 export const shallowReactiveHandlers = {
   get: shallowGet,
-  set: shallowSet,
+  set: shallowSet // 原版set的基础上加上shallow的flag判断
 }
-// 进行set方法合并
-let readonlyObj = {
+export const readonlyHandlers =
+{
+  get: readonlyGet,
+  // 只读的话就是这样返回
   set: (target, key, value) => {
-    console.log(`set ${value} on key ${key} is faild`)
-  },
+    console.log(`set on ${key} is failed`);
+  }
 }
-export const readonlyHandlers = extend(
-  {
-    get: readonlyGet,
-  },
-  readonlyObj
-)
-export const shallowReadonlyHandlers = extend(
-  {
-    get: shallowReadonlyGet,
-  },
-  readonlyObj
-)
+
+export const shallowReadonlyHandlers =
+{
+  get: shallowReadonlyGet,
+  // 只读的话就是这样返回
+  set: (target, key, value) => {
+    console.log(`set on ${key} is failed`);
+  }
+}
