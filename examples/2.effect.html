@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="../packages/reactivity/dist/reactivity.global.js"></script>
+  <script>
+    let {
+      reactive,
+      effect
+    } = VueReactivity
+    let person = reactive({
+      name: "张三",
+      family: {
+        son: "张思1",
+      },
+    })
+    effect(()=>{
+      console.log('person.name',person.name);
+    },{
+      lazy:false
+    })
+  </script>
+</body>
+
+</html>

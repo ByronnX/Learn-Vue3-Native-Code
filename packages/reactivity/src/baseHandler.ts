@@ -2,6 +2,8 @@ import {
   isObject
 } from "@vue/shared"
 import { reactive, readonly } from "./reactive"
+import { Track } from "./effect"
+import { TrackOpTypes } from "./operation"
 
 const get = createGetter()
 const shallowGet = createGetter(false, true)
@@ -12,12 +14,13 @@ const shallowReadonlyGet = createGetter(true, true)
 function createGetter(isReadonly = false, shallow = false) {
   return function get(target, key, receiver) {
     const res = Reflect.get(target, key, receiver)
+    
     // 判断
     if (!isReadonly) {
       // 是否只读
-      // 收集依赖 effect
+      // 收集依赖 effect      
+      Track(target, TrackOpTypes.GET, key)
     }
-
     if (shallow) {
       // 浅层代理
       return res
@@ -39,6 +42,8 @@ function createSetter(shallow = false) {
     return result
   }
 }
+
+// 四个handler方法
 export const reactiveHandlers = {
   get,
   set,// 原版

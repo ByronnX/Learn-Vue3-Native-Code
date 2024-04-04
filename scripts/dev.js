@@ -9,4 +9,4 @@ async function build(target) {
   }) // 子进程的输出在父包中输出
 }
 
-build("runtime-dom")
+build("reactivity")
