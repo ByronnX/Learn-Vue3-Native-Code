@@ -9,29 +9,26 @@
 </head>
 
 <body>
-  <h1 id="app">test</h1>
+  <div style="margin-left: 100px" id="app"></div style="margin-left: 100px">
   <script src="../packages/reactivity/dist/reactivity.global.js"></script>
+
   <script>
-    let {
-      reactive,
-      effect
+    const {
+      ref,
+      computed
     } = VueReactivity
-    let person = reactive({
-      name: "张三",
-      family: {
-        son: "张思1",
-      },
-      arr1 :[1,2,3]
+
+
+    const a = ref(10)
+    console.log(1, a.value)
+    const b = computed(() => {
+      return a.value + 100
     })
-    effect(()=>{
-      document.querySelector('#app').innerHTML = `${person.name = '里斯'}+${person.arr1[2]}`
-    },{
-      lazy:false
-    })
+    console.log(2, b.value)
     setTimeout(() => {
-      person.arr1.length = 1
-      person.arr1[100] = 10
-    }, 1000);
+      a.value = 10
+      console.log(3, b.value)
+    }, 500);
   </script>
 </body>
 

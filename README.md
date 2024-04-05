@@ -29,13 +29,5 @@ package subpath './package.json' is not defined by "exports" in D:\githupproject
 
 尝试换了版本,但是会报其他错误, 所以版本不同可能会出现不同问题
 
-### 实现模块列表:
-
-1. reactive
-2. effect
-3. ref
-4. toRef
-5. toRefs
-6. computed
-7. createApp
-8. apilifecycle
+# computed
+计算属性默认是只读的。当你尝试修改一个计算属性时，你会收到一个运行时警告。只在某些特殊场景中你可能才需要用到“可写”的属性，你可以通过同时提供 getter 和 setter 来创建
